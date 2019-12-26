@@ -9,7 +9,7 @@
     'license': 'OPL-1',
     
     # Dependencies
-    'depends': ['sale_stock','point_of_sale'],
+    'depends': ['sale_stock'],
     
     # Views
     'data': [

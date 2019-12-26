@@ -53,24 +53,24 @@ class Sales_Report(models.Model):
                         where stock_move.state='done' 
                         group by stock_move.product_id,sale_order_line.product_uom_qty,stock_move.date,stock_move.company_id
                     
-                        Union All
+                        -- Union All
 
-                        select 
-                        stock_move.company_id as company_id,
-                        stock_move.product_id,                        
-                        stock_move.date as date,
-                        sum(product_qty) as delivered_qty,
-                        0 as return_qty,
-                        sum(round((price_subtotal/pos_order_line.qty),2)) as sale_price_unit,                    
-                        0 as return_price_unit,
-                        sum(abs(stock_move.price_unit)) as sale_cost ,
-                        0 as return_cost
-                        from stock_move 
-                        inner join stock_location on stock_location.id=stock_move.location_dest_id and stock_location.usage='customer'                       
-                        inner join pos_order on pos_order.picking_id = stock_move.picking_id 
-                        inner join pos_order_line on pos_order_line.order_id = pos_order.id and pos_order_line.product_id = stock_move.product_id
-                        where stock_move.state='done' 
-                        group by stock_move.product_id,stock_move.date,pos_order_line.qty,stock_move.company_id                        
+                        -- select 
+                        -- stock_move.company_id as company_id,
+                        -- stock_move.product_id,                        
+                        -- stock_move.date as date,
+                        -- sum(product_qty) as delivered_qty,
+                        -- 0 as return_qty,
+                        -- sum(round((price_subtotal/pos_order_line.qty),2)) as sale_price_unit,                    
+                        -- 0 as return_price_unit,
+                        -- sum(abs(stock_move.price_unit)) as sale_cost ,
+                        -- 0 as return_cost
+                        -- from stock_move 
+                        -- inner join stock_location on stock_location.id=stock_move.location_dest_id and stock_location.usage='customer'                       
+                        -- inner join pos_order on pos_order.picking_id = stock_move.picking_id 
+                        -- inner join pos_order_line on pos_order_line.order_id = pos_order.id and pos_order_line.product_id = stock_move.product_id
+                        -- where stock_move.state='done' 
+                        -- group by stock_move.product_id,stock_move.date,pos_order_line.qty,stock_move.company_id                        
                         
                         Union All
                         
@@ -90,24 +90,24 @@ class Sales_Report(models.Model):
                         where stock_move.state='done'
                         group by stock_move.company_id,stock_move.product_id,sale_order_line.product_uom_qty,stock_move.date
                                                 
-                        Union All
+                        -- Union All
 
-                        select 
-                        stock_move.company_id as company_id,
-                        stock_move.product_id,
-                        Date(stock_move.date),
-                        0 as delivered_qty,
-                        sum(product_qty) as return_qty,
-                        0 as sale_price_unit,
-                        sum(round((price_subtotal/pos_order_line.qty),2)) as return_price_unit,
-                        0 as sale_cost,
-                        sum(abs(stock_move.price_unit)) as return_cost
-                        from stock_move 
-                        inner join stock_location on stock_location.id=stock_move.location_id and stock_location.usage='customer'
-                        inner join pos_order on pos_order.picking_id = stock_move.picking_id 
-                        inner join pos_order_line on pos_order_line.order_id = pos_order.id  and pos_order_line.product_id = stock_move.product_id
-                        where stock_move.state='done'
-                        group by stock_move.company_id,stock_move.product_id,pos_order_line.qty,stock_move.date                        
+                        -- select 
+                        -- stock_move.company_id as company_id,
+                        -- stock_move.product_id,
+                        -- Date(stock_move.date),
+                        -- 0 as delivered_qty,
+                        -- sum(product_qty) as return_qty,
+                        -- 0 as sale_price_unit,
+                        -- sum(round((price_subtotal/pos_order_line.qty),2)) as return_price_unit,
+                        -- 0 as sale_cost,
+                        -- sum(abs(stock_move.price_unit)) as return_cost
+                        -- from stock_move 
+                        -- inner join stock_location on stock_location.id=stock_move.location_id and stock_location.usage='customer'
+                        -- inner join pos_order on pos_order.picking_id = stock_move.picking_id 
+                        -- inner join pos_order_line on pos_order_line.order_id = pos_order.id  and pos_order_line.product_id = stock_move.product_id
+                        -- where stock_move.state='done'
+                        -- group by stock_move.company_id,stock_move.product_id,pos_order_line.qty,stock_move.date                        
                         )T2
                         Group by company_id,product_id,date::date
                 )
